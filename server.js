@@ -42,7 +42,7 @@ app.get("/stream", (req, res) => {
         return res.send("No URL provided");
     }
 
-    const ytDlp = spawn("./yt-dlp.exe", [
+    const ytDlp = spawn("./yt-dlp", [
         "-f", "bestaudio",
         "-o", "-",
         url
