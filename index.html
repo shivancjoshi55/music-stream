@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Music Streaming Website</title>
+<style>
+
+body{
+background:#121212;
+color:white;
+font-family:Arial;
+padding:20px;
+}
+
+input{
+padding:10px;
+width:300px;
+}
+
+button{
+padding:10px;
+}
+
+.song{
+display:flex;
+align-items:center;
+margin:10px;
+cursor:pointer;
+}
+
+.song img{
+width:80px;
+margin-right:10px;
+}
+
+</style>
+</head>
+
+
+<body>
+
+<h2>Music Streaming Website</h2>
+
+<input id="searchBox" placeholder="Search song">
+<button onclick="search()">Search</button>
+
+<div id="results"></div>
+
+<br>
+
+<audio id="player" controls style="width:100%"></audio>
+
+<script>
+
+async function search(){
+
+const query=document.getElementById("searchBox").value;
+
+const res=await fetch("/search?q="+query);
+
+const songs=await res.json();
+
+const results=document.getElementById("results");
+
+results.innerHTML="";
+
+songs.forEach(song=>{
+
+const div=document.createElement("div");
+
+div.className="song";
+
+div.innerHTML=`
+<img src="${song.thumbnail}">
+<span>${song.title}</span>
+`;
+
+div.onclick=()=>{
+play(song.url);
+};
+
+results.appendChild(div);
+
+});
+
+}
+
+function play(url){
+
+const player=document.getElementById("player");
+
+player.src="/stream?url="+url;
+
+player.play();
+
+}
+
+</script>
+
+</body>
+</html>
