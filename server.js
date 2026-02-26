@@ -42,11 +42,14 @@ app.get("/stream", (req, res) => {
         return res.send("No URL provided");
     }
 
-    const ytDlp = spawn("./yt-dlp", [
-        "-f", "bestaudio",
-        "-o", "-",
-        url
-    ]);
+    const ytDlp = spawn("yt-dlp", [
+    "-f", "bestaudio",
+    "-o", "-",
+    "--no-playlist",
+    "--user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
+    "--extractor-args", "youtube:player_client=android",
+    url
+]);
 
     res.setHeader("Content-Type", "audio/mp4");
 
