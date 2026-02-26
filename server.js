@@ -3,13 +3,14 @@ const yts = require("yt-search");
 const { spawn } = require("child_process");
 
 const app = express();
+
+// Serve frontend files
 app.use(express.static(__dirname));
 
 // Home route
 app.get("/", (req, res) => {
     res.send("Music fetch server is running");
 });
-
 
 // Search route
 app.get("/search", async (req, res) => {
@@ -32,8 +33,7 @@ app.get("/search", async (req, res) => {
     }
 });
 
-
-// Stream route using yt-dlp (FINAL WORKING)
+// Stream route using yt-dlp
 app.get("/stream", (req, res) => {
 
     const url = req.query.url;
@@ -42,7 +42,6 @@ app.get("/stream", (req, res) => {
         return res.send("No URL provided");
     }
 
-    // Run yt-dlp process
     const ytDlp = spawn("./yt-dlp.exe", [
         "-f", "bestaudio",
         "-o", "-",
@@ -51,7 +50,6 @@ app.get("/stream", (req, res) => {
 
     res.setHeader("Content-Type", "audio/mp4");
 
-    // Pipe audio to browser
     ytDlp.stdout.pipe(res);
 
     ytDlp.stderr.on("data", (data) => {
@@ -64,7 +62,7 @@ app.get("/stream", (req, res) => {
 
 });
 
-
+// IMPORTANT: Render-compatible port
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
